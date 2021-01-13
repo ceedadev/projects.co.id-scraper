@@ -1,7 +1,7 @@
 # projects.co.id-scraper
 Save available projects in projects.co.id (Indonesian Freelancing Site) to CSV
 > browsing projects using browser is time consuming.
-File will be saved on csv with delimiter `|`
+- File will be saved on csv with delimiter `|`
 
 ## Requirements
 - Python 3
