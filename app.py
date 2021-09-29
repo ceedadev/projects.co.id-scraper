@@ -29,7 +29,8 @@ for i in range(1,25): #looping for every page
     soup = BeautifulSoup(r.data, 'html.parser')
     #looping for every project h2 attribute
     for title in soup.find_all('h2'): #h2 tag to get title and url
-        project = title.get_text(strip=" ")
+        project:str = title.get_text(strip=" ")
+        project = project.replace(',','')
         url = title.a.get('href')
         #append to list
         project_title.append(project)
@@ -72,6 +73,6 @@ now = dt.strftime("%d%m%Y%H%M")
 
 #begin csv write
 with open("projects" + now + ".csv", "w+") as f:
-    writer=csv.writer(f, delimiter='|')
+    writer=csv.writer(f, delimiter=',')
     writer.writerow(data_header)
     writer.writerows(data)
