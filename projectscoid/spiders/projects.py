@@ -7,7 +7,12 @@ from datetime import datetime as dt
 
 base_url = 'https://projects.co.id/public/browse_projects/listing?page='
 
-
+def budgetSplit(value:str):
+    value = value.strip('Rp ').replace(',','')
+    value = value.split(' - ')
+    minBudget = int(value[0]) 
+    maxBudget = int(value[1])
+    return minBudget, maxBudget
 
 class ProjectsSpider(scrapy.Spider):
     name = 'projects'
@@ -24,7 +29,7 @@ class ProjectsSpider(scrapy.Spider):
             url = sel.css('h2').css('a::attr(href)').get()
             tags = sel.xpath("//span[@class='tag label label-default']/a/text()").getall()
             description:str = sel.css('p::text').extract_first()
-            description = description.strip().lower().replace('\n','').replace('\u00a0',' ').replace('\u0144',' ').replace(';', ':')
+            description = description.strip().lower().replace('\n','').replace('\u00a0',' ').replace('\u0144',' ').replace('\uf0b7', '-').replace('\u2022', '-').replace('\u2013', '').replace(';', ':')
             projectOwnerUser:str = sel.xpath("//a[@class='short-username']/strong/text()").get()
             projectOwnerUser = projectOwnerUser.strip()
             # Details Column
@@ -33,17 +38,12 @@ class ProjectsSpider(scrapy.Spider):
             # result = ['\n ', '\nRp 1,500,000 - 1,700,000', ' ', '\n04/11/2021 18:48:19 WIB', ' ', '\n04/12/2021 18:48:19 WIB', ' ', '\n14', ' ']
             publishedBudget:str = leftColumnDetails[1]
             publishedBudget = publishedBudget.strip()
-
             
-
+            publishedBudgetMin, publishedBudgetMax = budgetSplit(publishedBudget)
             publishedDate:str = leftColumnDetails[3]
             publishedDate = publishedDate.strip()
-            # publishedDate = dateTimeSerializer(publishedDate)
             selectDeadline:str = leftColumnDetails[5]
             selectDeadline = selectDeadline.strip()
-            # selectDeadline = dateTimeSerializer(selectDeadline)
-
-
 
             finishDays:str = leftColumnDetails[7]
             finishDays = finishDays.strip()
@@ -81,30 +81,14 @@ class ProjectsSpider(scrapy.Spider):
             projectOwnerRanking:str = projectOwnerColumn[-1]
             projectOwnerRanking = projectOwnerRanking.strip()
             
-
-            # print(title)
-            # print(url)
-            # print(tags)
-            # print(description)
-            # print(projectOwnerUser)
-            # print(publishedBudget)
-            # print(publishedDate)
-            # print(selectDeadline)
-            # print(finishDays)
-            # print(bidCount)
-            # print(projectStatus)
-            # print(needWeeklyReport)
-            # print(projectOwnerIsOnline)
-            # print(projectOwnerLocation)
-            # print(projectOwnerScore)
-            
-
+            #BEGIN ITEMLOADER
             l = ItemLoader(item=ProjectsItem())
             l.add_value('title',title)
             l.add_value('url', url)
             l.add_value('description', description)
             l.add_value('tags', tags)
-            l.add_value('publishedBudget', publishedBudget)
+            l.add_value('publishedBudgetMin', publishedBudgetMin)
+            l.add_value('publishedBudgetMax', publishedBudgetMax)
             l.add_value('publishedDate', publishedDate)
             l.add_value('selectDeadline', selectDeadline)
             l.add_value('finishDays', finishDays)
