@@ -17,37 +17,52 @@ Script user must abide to rules of the website, and use the data for good intent
 
 1. Download repository
 
-    `git clone https://github.com/ceedadev/projects.co.id-scraper.git`
+    ```bash
+    git clone https://github.com/ceedadev/projects.co.id-scraper.git
 
-    `cd projects.co.id-scraper`
+    cd projects.co.id-scraper
+    ```
 
 2. (Optional) Install Python Virtual Environment
 
-    `python3 -m venv venv`
+    ```bash
+    python3 -m venv venv
+    ```
 
-    Mac / Linux
+    - Mac / Linux
 
-    `source ./bin/activate`
+    ```bash
+    source ./bin/activate
+    ```
 
-    Windows Powershell
+    - Windows Powershell
 
-    `.\venv\Scripts\Activate.ps1`
+    ```bash
+    .\venv\Scripts\Activate.ps1
+    ```
 
 3. Install requirements
 
-    `pip install -r requirements.txt`
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 4. Run Spider
 
-   Output CSV
+   - Output CSV
 
-    `scrapy crawl projects -O projects.csv`
+    ```bash
+    scrapy crawl projects -O projects.csv
+    ```
 
-    or Output JSON
+    - or Output JSON
 
-    `scrapy crawl projects -O projects.json`
+    ```bash
+    scrapy crawl projects -O projects.json
+    ```
 
 ## Todo
+
 - [x] Implement Scrapy
 - [ ] ScrapyRT for API
 - [ ] Item Pipelines to SQL DB
