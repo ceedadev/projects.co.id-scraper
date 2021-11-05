@@ -7,10 +7,7 @@ from datetime import datetime as dt
 
 base_url = 'https://projects.co.id/public/browse_projects/listing?page='
 
-def dateTimeSerializer (value):
-    # 04/11/2021 16:15:58 WIB
-    dateTime = dt.strptime(value,"%d/%m/%Y %H:%M:%S WIB")
-    return dateTime
+
 
 class ProjectsSpider(scrapy.Spider):
     name = 'projects'
@@ -27,7 +24,7 @@ class ProjectsSpider(scrapy.Spider):
             url = sel.css('h2').css('a::attr(href)').get()
             tags = sel.xpath("//span[@class='tag label label-default']/a/text()").getall()
             description:str = sel.css('p::text').extract_first()
-            description = description.strip().lower().replace('\n','').replace(';', ':')
+            description = description.strip().lower().replace('\n','').replace('\u00a0',' ').replace('\u0144',' ').replace(';', ':')
             projectOwnerUser:str = sel.xpath("//a[@class='short-username']/strong/text()").get()
             projectOwnerUser = projectOwnerUser.strip()
             # Details Column
@@ -41,10 +38,10 @@ class ProjectsSpider(scrapy.Spider):
 
             publishedDate:str = leftColumnDetails[3]
             publishedDate = publishedDate.strip()
-            publishedDate = dateTimeSerializer(publishedDate)
+            # publishedDate = dateTimeSerializer(publishedDate)
             selectDeadline:str = leftColumnDetails[5]
             selectDeadline = selectDeadline.strip()
-            selectDeadline = dateTimeSerializer(selectDeadline)
+            # selectDeadline = dateTimeSerializer(selectDeadline)
 
 
 

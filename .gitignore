@@ -181,3 +181,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/venv,python,windows
+
+### PROJECT ###
+# Scraping Result
+*.csv
+*.json

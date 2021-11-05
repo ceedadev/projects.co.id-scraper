@@ -7,6 +7,11 @@ from itemloaders.processors import MapCompose, TakeFirst
 from scrapy.item import Item, Field
 from datetime import datetime as dt
 
+def dateTimeSerializer (value):
+    # 04/11/2021 16:15:58 WIB
+    dateTime = dt.strptime(value,"%d/%m/%Y %H:%M:%S WIB")
+    return dateTime
+
 class ProjectsItem(Item):
     # define the fields for your item here like:
     title = Field(output_processor=TakeFirst())
@@ -14,8 +19,8 @@ class ProjectsItem(Item):
     description = Field(output_processor=TakeFirst())
     tags = Field()
     publishedBudget = Field(output_processor=TakeFirst())
-    publishedDate = Field( output_processor=TakeFirst())
-    selectDeadline = Field( output_processor=TakeFirst())
+    publishedDate = Field(input_processor=MapCompose(dateTimeSerializer), output_processor=TakeFirst())
+    selectDeadline = Field(input_processor=MapCompose(dateTimeSerializer), output_processor=TakeFirst())
     finishDays = Field(output_processor=TakeFirst())
     projectStatus = Field(output_processor=TakeFirst())
     bidCount = Field(output_processor=TakeFirst())
